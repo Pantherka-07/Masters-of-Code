@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Форма задачи{% endblock %}
+{% block content %}
+<h2>Создать/Изменить задачу</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Сохранить</button>
+</form>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Список задач{% endblock %}
+{% block content %}
+<h2>Ваши задачи</h2>
+<ul>
+  {% for task in tasks %}
+    <li>
+      {{ task.title }} - {{ task.status }}
+      <a href="{% url 'task_edit' task.id %}">Изменить</a>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}

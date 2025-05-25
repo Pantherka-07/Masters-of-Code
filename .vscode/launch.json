@@ -1,0 +1,44 @@
+   {
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Django: Run Server",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/manage.py",
+            "args": ["runserver"],
+            "django": true
+        },
+        {
+            "name": "Debug Frontend (Chrome)",
+            "request": "launch",
+            "type": "chrome",
+            "url": "http://localhost:8000",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
+            "name": "Debug Frontend (Edge)",
+            "request": "launch",
+            "type": "msedge",
+            "url": "http://localhost:8000",
+            "webRoot": "${workspaceFolder}"
+        }
+    ]
+}
+{
+    "name": "Debug JavaScript",
+    "type": "chrome",
+    "request": "launch",
+    "url": "http://localhost:8000",
+    "webRoot": "${workspaceFolder}",
+    "sourceMaps": true,
+    "trace": true
+}
+{
+    "name": "Python: Django",
+    "type": "python",
+    "request": "launch",
+    "program": "${workspaceFolder}/manage.py",
+    "args": ["runserver", "--noreload"],
+    "django": true
+}
