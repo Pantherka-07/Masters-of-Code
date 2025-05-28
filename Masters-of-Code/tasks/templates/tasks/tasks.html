@@ -1,0 +1,51 @@
+{% extends "tasks/base.html" %}
+{% block title %}Задачи — TaskManager{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="mb-3 text-end">
+    <span class="badge bg-success fs-5">Суммарная оценка: {{ total_points }} ⭐</span>
+  </div>
+  <ul class="nav nav-tabs">
+    <li class="nav-item"><a class="nav-link {% if status == 'active' %}active{% endif %}" href="?status=active">Активные</a></li>
+    <li class="nav-item"><a class="nav-link {% if status == 'completed' %}active{% endif %}" href="?status=completed">Завершённые</a></li>
+    <li class="nav-item"><a class="nav-link {% if status == 'closed' %}active{% endif %}" href="?status=closed">Закрытые</a></li>
+  </ul>
+  <div class="mt-4">
+    {% if tasks %}
+      {% for task in tasks %}
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">📌 {{ task.title }}</h5>
+            <p class="card-text mb-1">🗓️ {{ task.due_date|date:'Y-m-d H:i' }} | 🔁 {{ task.get_reminder_type_display }} | 📧 {{ task.get_notification_method_display }}</p>
+            {% if task.description %}
+              <p class="card-text mb-1">📝 {{ task.description }}</p>
+            {% endif %}
+            {% if task.points %}
+              <p class="card-text mb-1">⭐ Очки: {{ task.points }}</p>
+            {% endif %}
+            {% if task.trigger_task %}
+              <p class="card-text mb-1">🔗 Активируется после: {{ task.trigger_task.title }}</p>
+            {% endif %}
+            <div class="d-flex gap-2">
+              {% if not task.is_completed %}
+                <form method="post" action="{% url 'task_complete' task.pk %}?status={{ status }}">{% csrf_token %}<button class="btn btn-outline-success btn-sm">Завершить</button></form>
+              {% endif %}
+              {% if not task.is_closed %}
+                <form method="post" action="{% url 'task_close' task.pk %}?status={{ status }}">{% csrf_token %}<button class="btn btn-outline-secondary btn-sm">Закрыть</button></form>
+              {% endif %}
+              <a href="{% url 'task_update' task.pk %}" class="btn btn-outline-primary btn-sm">Редактировать</a>
+              <form method="post" action="{% url 'task_delete' task.pk %}?status={{ status }}" onsubmit="return confirm('Удалить задачу?');" style="display:inline;">
+                {% csrf_token %}
+                <button class="btn btn-outline-danger btn-sm">Удалить</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>У вас нет задач.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

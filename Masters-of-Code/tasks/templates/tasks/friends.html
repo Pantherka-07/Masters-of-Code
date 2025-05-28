@@ -1,0 +1,34 @@
+{% extends 'tasks/base.html' %}
+{% block title %}Друзья — TaskManager{% endblock %}
+{% block content %}
+<div class="container mt-4" style="max-width: 600px;">
+  <h2 class="mb-4 text-center">Ваши друзья</h2>
+  {% if friends %}
+    <ul class="list-group mb-4">
+      {% for friend in friends %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span>{{ friend.username }} <span class="text-muted">(ID: {{ friend.id }})</span></span>
+          <form method="post" action="{% url 'remove_friend' friend.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button class="btn btn-outline-danger btn-sm">Удалить</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-center">У вас пока нет друзей.</p>
+  {% endif %}
+  <h4 class="mb-3">Добавить друга</h4>
+  <form method="post" action="{% url 'add_friend' %}">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+      {{ form.username }}
+      {{ form.user_id }}
+      <button class="btn btn-success" type="submit">Добавить</button>
+    </div>
+  </form>
+  <div class="text-center mt-3">
+    <a href="{% url 'tasks' %}" class="btn btn-secondary">Вернуться к задачам</a>
+  </div>
+</div>
+{% endblock %} 

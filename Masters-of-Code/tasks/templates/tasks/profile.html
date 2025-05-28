@@ -1,0 +1,48 @@
+{% extends 'tasks/base.html' %}
+{% block title %}Профиль — TaskManager{% endblock %}
+{% block content %}
+<div class="container mt-4" style="max-width: 600px;">
+  <h2 class="mb-4 text-center">Профиль пользователя</h2>
+  <div class="text-center mb-4">
+    <div class="mb-2 small text-muted">ID: {{ user_obj.invite_id }}</div>
+    <div class="mb-2 small">Ссылка для приглашения:<br><a href="{{ request.build_absolute_uri|slice:':-request.get_full_path|length' }}register/?invite={{ user_obj.invite_id }}" target="_blank">{{ request.build_absolute_uri|slice:':-request.get_full_path|length' }}register/?invite={{ user_obj.invite_id }}</a></div>
+    {% if user_obj.avatar %}
+      <img src="{{ user_obj.avatar.url }}" alt="avatar" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">
+    {% else %}
+      <div class="rounded-circle bg-secondary d-inline-block" style="width: 120px; height: 120px;"></div>
+    {% endif %}
+  </div>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label class="form-label" for="id_first_name">Имя</label>
+      {{ form.first_name.errors }}
+      {{ form.first_name }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="id_last_name">Фамилия</label>
+      {{ form.last_name.errors }}
+      {{ form.last_name }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="id_email">Email</label>
+      {{ form.email.errors }}
+      {{ form.email }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="id_avatar">Аватар</label>
+      {{ form.avatar.errors }}
+      {{ form.avatar }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="id_position">Должность</label>
+      {{ form.position.errors }}
+      {{ form.position }}
+    </div>
+    <button type="submit" class="btn btn-success w-100">Сохранить</button>
+  </form>
+  <div class="text-center mt-3">
+    <a href="{% url 'tasks' %}" class="btn btn-secondary">Вернуться к задачам</a>
+  </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,150 @@
+body {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: "Segoe UI", sans-serif;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+}
+.login-card {
+  background: white;
+  padding: 3rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+body.bg-opera-light {
+  background: linear-gradient(135deg, #f5f6fa 0%, #e3e6ee 100%) !important;
+  transition: background 0.3s;
+}
+body.bg-opera-dark {
+  background: linear-gradient(135deg, #23272f 0%, #181a20 100%) !important;
+  transition: background 0.3s;
+}
+@media (prefers-color-scheme: dark) {
+  body.bg-opera-auto {
+    background: linear-gradient(135deg, #23272f 0%, #181a20 100%) !important;
+  }
+}
+@media (prefers-color-scheme: light) {
+  body.bg-opera-auto {
+    background: linear-gradient(135deg, #f5f6fa 0%, #e3e6ee 100%) !important;
+  }
+}
+body.bg-sakura {
+  background: linear-gradient(135deg, #ffb6b9 0%, #fcd5ce 40%, #f9c5d1 70%, #fcb69f 100%), url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center center/cover no-repeat fixed;
+  min-height: 100vh;
+}
+
+/* Sakura Raccoon Animation */
+.sakura-raccoon-container {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 9999;
+  pointer-events: none;
+}
+.sakura-raccoon {
+  width: 120px;
+  height: 120px;
+  position: relative;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.15));
+}
+.sakura-branch {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 120px;
+  height: 40px;
+  z-index: 1;
+}
+.sakura-petal {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background: url('https://pngimg.com/d/sakura_PNG127.png') center/contain no-repeat;
+  opacity: 0.8;
+  animation: sakura-fall 4s linear infinite;
+}
+@keyframes sakura-fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  80% { opacity: 0.8; }
+  100% { transform: translateY(100px) rotate(60deg); opacity: 0; }
+}
+
+/* Sakura animated background for main page */
+.sakura-bg-animated {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.sakura-bg-animated .sakura-petal {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background: url('https://pngimg.com/d/sakura_PNG127.png') center/contain no-repeat, #eab0c6;
+  border-radius: 50%;
+  border: 1px solid #d48bb6;
+  opacity: 0.7;
+  animation: sakura-fall-main 7s linear infinite;
+}
+@keyframes sakura-fall-main {
+  0% { transform: translateY(-40px) rotate(0deg); opacity: 1; }
+  80% { opacity: 0.7; }
+  100% { transform: translateY(100vh) rotate(90deg); opacity: 0; }
+}
+
+.bg-sakura-blur {
+  position: relative;
+  background: none !important;
+}
+.bg-sakura-blur::before {
+  content: '';
+  position: fixed;
+  z-index: 0;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  pointer-events: none;
+  background: radial-gradient(circle at 20% 30%, #ffe6f0 0%, #f9c5d1 40%, transparent 70%),
+              radial-gradient(circle at 80% 60%, #f9c5d1 0%, #ffe6f0 40%, transparent 70%),
+              radial-gradient(circle at 60% 20%, #fff 0%, #ffe6f0 50%, transparent 80%);
+  filter: blur(32px) brightness(1.1);
+  opacity: 0.85;
+  transition: opacity 0.5s;
+}
+
+.rain-bg-animated {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.rain-bg-animated .rain-drop {
+  position: absolute;
+  width: 3px;
+  height: 32px;
+  background: linear-gradient(to bottom, #aeeaff 0%, #2196f3 100%);
+  border-radius: 2px;
+  opacity: 0.5;
+  animation: rain-fall 1.2s linear infinite;
+}
+@keyframes rain-fall {
+  0% { transform: translateY(-40px); opacity: 0.7; }
+  80% { opacity: 0.5; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+.site-bg-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.sakura-bg-animated, .rain-bg-animated {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}

@@ -1,0 +1,47 @@
+{% extends 'tasks/base.html' %}
+{% block title %}Регистрация — TaskManager{% endblock %}
+{% block content %}
+<div class="login-card">
+  <h2 class="mb-4 text-center">Регистрация</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label class="form-label" for="id_username">Логин</label>
+      {{ form.username.errors }}
+      {{ form.username }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="id_email">Email</label>
+      {{ form.email.errors }}
+      {{ form.email }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="id_password">Пароль</label>
+      {{ form.password.errors }}
+      {{ form.password }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="id_password2">Повторите пароль</label>
+      {{ form.password2.errors }}
+      {{ form.password2 }}
+    </div>
+    <button type="submit" class="btn btn-success w-100">Зарегистрироваться</button>
+  </form>
+  <div class="text-center mt-3">
+    <a href="{% url 'index' %}">Уже есть аккаунт? Войти</a>
+  </div>
+</div>
+{% endblock %}
+{% block head %}
+<style>
+.login-card {
+  background: white;
+  padding: 3rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  margin: 3rem auto;
+}
+</style>
+{% endblock %} 

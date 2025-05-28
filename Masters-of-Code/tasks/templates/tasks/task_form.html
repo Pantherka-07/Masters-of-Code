@@ -1,0 +1,65 @@
+{% extends 'tasks/base.html' %}
+
+{% block content %}
+<div class="task-card">
+  <h2 class="mb-4 text-center">
+    {% if form.instance.pk %}Редактировать задачу{% else %}Добавить новую задачу{% endif %}
+  </h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label class="form-label" for="id_title">Название задачи</label>
+      {{ form.title.errors }}
+      {{ form.title }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="id_due_date">Дата и время выполнения</label>
+      {{ form.due_date.errors }}
+      {{ form.due_date }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="id_reminder_type">Тип напоминания</label>
+      {{ form.reminder_type.errors }}
+      {{ form.reminder_type }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="id_notification_method">Способ уведомления</label>
+      {{ form.notification_method.errors }}
+      {{ form.notification_method }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="id_description">Описание</label>
+      {{ form.description.errors }}
+      {{ form.description }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="id_points">Очки за выполнение</label>
+      {{ form.points.errors }}
+      {{ form.points }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="id_trigger_task">Триггер-задача (активируется после выполнения выбранной)</label>
+      {{ form.trigger_task.errors }}
+      {{ form.trigger_task }}
+    </div>
+    <button type="submit" class="btn btn-success w-100">Сохранить задачу</button>
+    <div class="text-center mt-3">
+      <a href="{% url 'tasks' %}" class="btn btn-secondary w-100">Вернуться к списку задач</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block head %}
+<style>
+.task-card {
+  background: white;
+  padding: 3rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 600px;
+  margin: 3rem auto;
+}
+</style>
+{% endblock %} 

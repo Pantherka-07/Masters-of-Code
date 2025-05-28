@@ -1,0 +1,128 @@
+{% extends "tasks/base.html" %}
+{% block title %}Статистика — TaskManager{% endblock %}
+
+{% block content %}
+<nav class="navbar bg-white shadow-sm px-4 py-3 mb-4">
+  <span class="navbar-brand">📊 Статистика пользователя: {{ request.user.username }}</span>
+  <div class="d-flex gap-2">
+    <a href="{% url 'tasks' %}" class="btn btn-outline-primary btn-sm">Задачи</a>
+    <a href="{% url 'friends' %}" class="btn btn-outline-info btn-sm">Друзья</a>
+    <a href="{% url 'profile' %}" class="btn btn-outline-dark btn-sm">Профиль</a>
+  </div>
+</nav>
+<div class="container">
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title">Всего задач</h6>
+          <span class="display-5 fw-bold text-primary">{{ total_tasks }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title">Активные</h6>
+          <span class="display-5 fw-bold text-success">{{ active_tasks }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title">Завершённые</h6>
+          <span class="display-5 fw-bold text-info">{{ completed_tasks }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title">Закрытые</h6>
+          <span class="display-5 fw-bold text-secondary">{{ closed_tasks }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-4">
+    <div class="col-md-6 mb-4 mb-md-0">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title">Завершённые задачи по датам</h6>
+          <canvas id="completedByDateChart" height="120"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title">Задачи по типу напоминания</h6>
+          <canvas id="reminderTypeChart" height="120"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <div class="alert alert-warning text-center fs-5">
+        Суммарная оценка за все завершённые задачи: <b>{{ total_points }}</b> ⭐
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// График завершённых задач по датам
+const completedByDate = JSON.parse('{{ completed_by_date|safe|escapejs }}');
+const dateLabels = completedByDate.map(item => item.due_date__date);
+const dateCounts = completedByDate.map(item => item.count);
+new Chart(document.getElementById('completedByDateChart'), {
+  type: 'line',
+  data: {
+    labels: dateLabels,
+    datasets: [{
+      label: 'Завершённые задачи',
+      data: dateCounts,
+      borderColor: '#0d6efd',
+      backgroundColor: 'rgba(13,110,253,0.1)',
+      fill: true,
+      tension: 0.3,
+      pointRadius: 4,
+      pointBackgroundColor: '#0d6efd',
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: { y: { beginAtZero: true } }
+  }
+});
+// График по типу напоминания
+const reminderMap = {
+  'one_time': 'Однократное',
+  'periodic': 'Периодическое',
+  'daily': 'Ежедневное',
+  'trigger': 'По триггеру',
+};
+const byReminder = JSON.parse('{{ by_reminder|safe|escapejs }}');
+const reminderLabels = byReminder.map(item => reminderMap[item.reminder_type] || item.reminder_type);
+const reminderCounts = byReminder.map(item => item.count);
+new Chart(document.getElementById('reminderTypeChart'), {
+  type: 'doughnut',
+  data: {
+    labels: reminderLabels,
+    datasets: [{
+      data: reminderCounts,
+      backgroundColor: ['#0d6efd', '#20c997', '#ffc107', '#6f42c1'],
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom' } }
+  }
+});
+</script>
+{% endblock %} 

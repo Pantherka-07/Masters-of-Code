@@ -1,0 +1,160 @@
+{% extends 'tasks/base.html' %}
+{% block title %}Настройки{% endblock %}
+{% block head %}
+  <style>
+    .settings-material {
+      background: var(--settings-bg, #f5f6fa);
+      border-radius: 18px;
+      box-shadow: 0 4px 32px 0 rgba(60,60,60,0.08);
+      max-width: 480px;
+      margin: 3rem auto 0 auto;
+      padding: 2.5rem 2rem 2rem 2rem;
+      position: relative;
+      z-index: 1;
+    }
+    .settings-title-mat {
+      font-size: 2.1rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: #222;
+      letter-spacing: 0.01em;
+    }
+    .settings-section-mat {
+      margin-bottom: 2.2rem;
+    }
+    .mat-btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+    }
+    .mat-btn {
+      border: none;
+      outline: none;
+      border-radius: 8px;
+      padding: 0.7rem 1.3rem;
+      font-size: 1rem;
+      font-weight: 500;
+      background: #f3f3f7;
+      color: #333;
+      box-shadow: 0 2px 8px 0 rgba(60,60,60,0.04);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    .mat-btn.active, .mat-btn:focus {
+      background: #eab0c6;
+      color: #fff;
+      box-shadow: 0 4px 16px 0 rgba(234,176,198,0.18);
+    }
+    .mat-btn.sakura { background: linear-gradient(90deg, #ffb6b9 0%, #f9c5d1 100%); color: #fff; }
+    .mat-btn.sakura.active, .mat-btn.sakura:focus { background: #fcb69f; color: #fff; }
+    .mat-btn.rain { background: linear-gradient(90deg, #aeeaff 0%, #2196f3 100%); color: #fff; }
+    .mat-btn.rain.active, .mat-btn.rain:focus { background: #2196f3; color: #fff; }
+    .mat-btn.none { background: #eee; color: #888; }
+    .mat-btn.none.active, .mat-btn.none:focus { background: #bbb; color: #fff; }
+    @media (max-width: 600px) {
+      .settings-material { padding: 1.2rem 0.5rem; }
+      .settings-title-mat { font-size: 1.3rem; }
+    }
+  </style>
+{% endblock %}
+{% block content %}
+<body class="settings-page">
+  <div class="settings-material">
+    <div class="settings-title-mat">Настройки</div>
+    <div class="settings-section-mat">
+      <div class="mb-2 fw-semibold">Фон приложения</div>
+      <div class="mat-btn-group">
+        <button type="button" class="mat-btn sakura" id="bg-sakura">Сакура</button>
+        <button type="button" class="mat-btn" id="bg-light">Светлый</button>
+        <button type="button" class="mat-btn" id="bg-dark">Тёмный</button>
+        <button type="button" class="mat-btn" id="bg-auto">Авто</button>
+        <button type="button" class="mat-btn rain" id="bg-rain">Дождик</button>
+        <button type="button" class="mat-btn none" id="bg-none">Без фона</button>
+      </div>
+      <div style="text-align:center; margin-top:1.5rem;">
+        <button type="button" class="mat-btn" id="save-settings-btn" style="min-width:140px;">Сохранить</button>
+      </div>
+      <div id="settings-saved-msg" style="display:none;color:#4caf50;font-weight:500;margin-top:0.7rem;text-align:center;">Настройки сохранены!</div>
+    </div>
+    <div class="settings-placeholder mt-4"></div>
+  </div>
+  <script>
+    function applyBgSetting(bg) {
+      document.body.classList.remove('bg-sakura', 'bg-opera-light', 'bg-opera-dark', 'bg-opera-auto', 'rain-bg', 'no-bg');
+      var overlay = document.querySelector('.site-bg-overlay');
+      if (overlay) overlay.querySelectorAll('.rain-bg-animated')?.forEach(e => e.remove());
+      document.querySelectorAll('.rain-bg-animated')?.forEach(e => e.remove());
+      if (bg === 'sakura') document.body.classList.add('bg-sakura');
+      else if (bg === 'light') document.body.classList.add('bg-opera-light');
+      else if (bg === 'dark') document.body.classList.add('bg-opera-dark');
+      else if (bg === 'auto') document.body.classList.add('bg-opera-auto');
+      else if (bg === 'rain') {
+        document.body.classList.add('rain-bg');
+        if (overlay) {
+          const rain = document.createElement('div');
+          rain.className = 'rain-bg-animated';
+          for (let i = 0; i < 15; i++) {
+            const drop = document.createElement('div');
+            drop.className = 'rain-drop';
+            drop.style.left = (3 + i * 6.5) + 'vw';
+            drop.style.animationDelay = (Math.random() * 1.5).toFixed(2) + 's';
+            rain.appendChild(drop);
+          }
+          overlay.appendChild(rain);
+        }
+      } else if (bg === 'none') {
+        document.body.classList.add('no-bg');
+      }
+    }
+    function setActiveBtn(bg) {
+      document.getElementById('bg-sakura').classList.remove('active');
+      document.getElementById('bg-light').classList.remove('active');
+      document.getElementById('bg-dark').classList.remove('active');
+      document.getElementById('bg-auto').classList.remove('active');
+      document.getElementById('bg-rain').classList.remove('active');
+      document.getElementById('bg-none').classList.remove('active');
+      if (bg === 'sakura') document.getElementById('bg-sakura').classList.add('active');
+      else if (bg === 'light') document.getElementById('bg-light').classList.add('active');
+      else if (bg === 'dark') document.getElementById('bg-dark').classList.add('active');
+      else if (bg === 'auto') document.getElementById('bg-auto').classList.add('active');
+      else if (bg === 'rain') document.getElementById('bg-rain').classList.add('active');
+      else if (bg === 'none') document.getElementById('bg-none').classList.add('active');
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      let bg = localStorage.getItem('app-bg') || 'sakura';
+      applyBgSetting(bg);
+      setActiveBtn(bg);
+      document.getElementById('bg-sakura').onclick = function() {
+        setActiveBtn('sakura');
+      };
+      document.getElementById('bg-light').onclick = function() {
+        setActiveBtn('light');
+      };
+      document.getElementById('bg-dark').onclick = function() {
+        setActiveBtn('dark');
+      };
+      document.getElementById('bg-auto').onclick = function() {
+        setActiveBtn('auto');
+      };
+      document.getElementById('bg-rain').onclick = function() {
+        setActiveBtn('rain');
+      };
+      document.getElementById('bg-none').onclick = function() {
+        setActiveBtn('none');
+      };
+      document.getElementById('save-settings-btn').onclick = function() {
+        const active = document.querySelector('.mat-btn-group .active');
+        if (active) {
+          const id = active.id.replace('bg-', '');
+          localStorage.setItem('app-bg', id);
+          applyBgSetting(id);
+          if (window.applyBgSetting) window.applyBgSetting(id);
+        }
+        const msg = document.getElementById('settings-saved-msg');
+        msg.style.display = 'block';
+        setTimeout(() => { msg.style.display = 'none'; }, 1500);
+      };
+    });
+  </script>
+</body>
+{% endblock %} 
